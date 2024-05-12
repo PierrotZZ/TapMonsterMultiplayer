@@ -5,17 +5,21 @@ using UnityEngine;
 
 public class PlayerTest : MonoBehaviour
 {
-    public MonsterScript monster;
 
     internal PlayerData playerData = new PlayerData();
     [SerializeField] int moneyPlayer;
+
+    private void Start()
+    {
+
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            monster.TakeDamage();
+            GameManager.Instance.monster.TakeDamage();
         }
         moneyPlayer = playerData.Money;
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] internal PlayerTest[] players;
+    [SerializeField] internal MonsterScript monster;
     // Start is called before the first frame update
 
     private void Awake()
