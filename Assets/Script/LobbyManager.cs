@@ -30,7 +30,7 @@ public class LobbyManager : MonoBehaviour
 
         AuthenticationService.Instance.ClearSessionToken();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        Debug.Log("User login " + AuthenticationService.Instance.PlayerId);
+        Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
     }
 
     async public void CreateLobby()
@@ -103,8 +103,8 @@ public class LobbyManager : MonoBehaviour
     {
         for (int i = 0; i < joinnedLobby.Players.Count; i++)
         {
-                playerNameText[i].text = joinnedLobby.Players[i].Data["name"].Value;
-                Debug.Log(joinnedLobby.Players[i].Data["name"].Value);
+            playerNameText[i].text = joinnedLobby.Players[i].Data["name"].Value;
+            Debug.Log(joinnedLobby.Players[i].Data["name"].Value);
         }
     }
 
