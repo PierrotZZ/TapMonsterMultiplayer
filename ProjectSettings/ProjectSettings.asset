@@ -157,7 +157,8 @@ PlayerSettings:
   resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Standalone: com.DefaultCompany.TapMonsterMultiplayer
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -666,11 +667,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 666ab59a-831f-4b7d-a0bc-d61efdcaa942
+  cloudProjectId: 518daf08-ebfa-43b7-ba32-7d0be30f82fa
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: TapMonsterMultiplayer 2024-05-04_15-38-09
-  organizationId: pierrot0945219255
+  projectName: TapMonsterMultiplayer
+  organizationId: pathiphanp
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

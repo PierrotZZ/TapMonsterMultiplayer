@@ -7,35 +7,88 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEngine.UI;
+using System;
 
 public class LobbyManager : MonoBehaviour
 {
-    public TMP_InputField playerNameInput, lobbyCodeInput;
+    public TMP_InputField lobbyCodeInput;
     public GameObject introLobby, lobbyPanel;
     public TMP_Text[] playerNameText;
     public TMP_Text lobbyCodeText;
     Lobby hostLobby, joinnedLobby;
+
+
+    [Header("Login")]
+    public CloudSaveManager cloudSaveManager;
+    public TMP_InputField usersName;
+    public TMP_InputField password;
+    public TMP_InputField playerNameInput;
+    public Button loginBtn;
+    public Button signInBtn;
+    public Button loginSectionBtn;
+    public Button signInSectionBtn;
+    public GameObject selectSection;
+    public GameObject loginSection;
+
+
+    public string playerId;
+
     // Start is called before the first frame update
     async void Start()
     {
+        cloudSaveManager.lobbyManager = this;
         await UnityServices.InitializeAsync();
+        loginBtn.onClick.AddListener(OnClickLogin);
+        signInBtn.onClick.AddListener(OnClickSingIn);
+        loginSectionBtn.onClick.AddListener(OnClickSectionloginBtn);
+        signInSectionBtn.onClick.AddListener(OnClickSectionSignInBtn);
+
+        await Authenticate();
     }
 
+    private void OnClickSectionSignInBtn()
+    {
+        selectSection.gameObject.SetActive(false);
+        loginSection.gameObject.SetActive(true);
+        signInBtn.gameObject.SetActive(true);
+        playerNameInput.gameObject.SetActive(true);
+    }
+    private void OnClickSectionloginBtn()
+    {
+        selectSection.gameObject.SetActive(false);
+        loginSection.gameObject.SetActive(true);
+        loginBtn.gameObject.SetActive(true);
+    }
+    private void OnClickSingIn()
+    {
+        var respond = cloudSaveManager.SignIn(usersName.text, password.text, playerNameInput.text, true);
+        OpenIntroLobby();
+    }
+    private void OnClickLogin()
+    {
+        var respond = cloudSaveManager.SignIn(usersName.text, password.text, "", false);
+        OpenIntroLobby();
+    }
+    void OpenIntroLobby()
+    {
+        introLobby.gameObject.SetActive(true);
+        loginSection.SetActive(false);
+    }
     async Task Authenticate()
     {
         if (AuthenticationService.Instance.IsSignedIn)
         {
             return;
         }
-
-        AuthenticationService.Instance.ClearSessionToken();
+        // AuthenticationService.Instance.ClearSessionToken();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        playerId = AuthenticationService.Instance.PlayerId;
         Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
     }
 
     async public void CreateLobby()
     {
-        await Authenticate();
 
         CreateLobbyOptions options = new CreateLobbyOptions
         {

@@ -1,0 +1,13 @@
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\SaveModule.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\SaveModule.deps.json
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\SaveModule.pdb
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Unity.Services.CloudCode.Apis.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Unity.Services.CloudCode.Core.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Google.Protobuf.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Grpc.Core.Api.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Grpc.Net.Client.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Grpc.Net.Common.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\JsonSubTypes.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation-cross-platform\Newtonsoft.Json.dll

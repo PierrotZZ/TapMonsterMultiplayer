@@ -1,0 +1,13 @@
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\SaveModule.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\SaveModule.deps.json
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\SaveModule.pdb
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Unity.Services.CloudCode.Apis.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Unity.Services.CloudCode.Core.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Google.Protobuf.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Grpc.Core.Api.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Grpc.Net.Client.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Grpc.Net.Common.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\JsonSubTypes.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\pathi\AppData\Local\Temp\SaveModule\module-compilation\Newtonsoft.Json.dll

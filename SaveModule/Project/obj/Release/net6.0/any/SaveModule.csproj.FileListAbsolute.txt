@@ -1,0 +1,13 @@
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\bin\Release\net6.0\any\SaveModule.deps.json
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\bin\Release\net6.0\any\SaveModule.dll
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\bin\Release\net6.0\any\SaveModule.pdb
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.csproj.AssemblyReference.cache
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.AssemblyInfoInputs.cache
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.AssemblyInfo.cs
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.csproj.CoreCompileInputs.cache
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.sourcelink.json
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.dll
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\refint\SaveModule.dll
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\SaveModule.pdb
+C:\Users\pathi\Desktop\School\3-2\CGE499 GameOnline\TapMonsterMultiplayer\SaveModule\Project\obj\Release\net6.0\any\ref\SaveModule.dll
