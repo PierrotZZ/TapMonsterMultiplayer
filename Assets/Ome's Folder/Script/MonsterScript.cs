@@ -1,9 +1,9 @@
-
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
+using UnityEditor.VersionControl;
 
-public class MonsterScript : MonoBehaviour
+public class MonsterScript : NetworkBehaviour
 {
     BossStat bossStat = new BossStat();
 
@@ -22,33 +22,62 @@ public class MonsterScript : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
+
     }
+
     private void Start()
     {
-        OnBirth();
+        rndHp = Random.Range(30, 80);
+        color = Random.ColorHSV();
+
+        if (!IsServer)
+        {
+            OnBirth(color, rndHp);
+        }
+
+        if (!IsOwner) return;
+        OnBirthServerRpc(color, rndHp);
+
+        // if (IsOwner)
+        // {
+        //     OnBirthServerRpc();
+        // }
+
+
     }
 
 
     void OnEnable()
     {
-        OnBirth();
-        int rndHp = Random.Range(30, 80);
-        bossStat.Health = rndHp;
-        sliderHp.maxValue = rndHp;
-        sliderHp.value = rndHp;
-        Debug.Log(bossStat.Health);
+        rndHp = Random.Range(30, 80);
+        color = Random.ColorHSV();
+
+        if (!IsOwner) return;
+        OnBirthServerRpc(color, rndHp);
+
+
+        // OnBirth();
+
+        // if (IsOwner)
+        // {
+        //     OnBirthServerRpc();
+        // }
     }
 
     void Update()
     {
-        monsterSprite.color = color;
+        print(IsServer);
+
+        if (!IsOwner) return;
+        UpdateColorServerRpc();
+
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
-        bossStat.Health -= 5;
-        sliderHp.value = bossStat.Health;
-        OnDeath();
+        TakeDamageServerRpc(damage);
+        OnDeathServerRpc();
     }
 
     void OnDeath()
@@ -61,17 +90,92 @@ public class MonsterScript : MonoBehaviour
         }
     }
 
-    void OnBirth()
+    void OnBirth(Color serverColor, int bossHealth)
     {
-        color = Random.ColorHSV();
         isDead = false;
+        color = serverColor;
+        bossStat.Health = bossHealth;
+        sliderHp.maxValue = bossHealth;
+        sliderHp.value = bossHealth;
     }
+
 
     public void DisableGo()
     {
-
         gameObject.SetActive(false);
     }
+
+    [ServerRpc]
+    void OnDeathServerRpc()
+    {
+        if (bossStat.Health <= 0 && !isDead)
+        {
+            isDead = true;
+            animator.Play("DeathAnimation");
+            GameManager.Instance.AddMoney(moneyDrop);
+            OnDeathClientRpc();
+        }
+    }
+
+    [ClientRpc]
+    void OnDeathClientRpc()
+    {
+        isDead = true;
+        //GameManager.Instance.AddMoney(moneyDrop);
+    }
+
+    [ServerRpc]
+    void OnBirthServerRpc(Color serverColor, int bossHealth)
+    {
+        OnBirthClientRpc(serverColor, bossHealth);
+        bossStat.Health = bossHealth;
+        sliderHp.maxValue = bossHealth;
+        sliderHp.value = bossHealth;
+        isDead = false;
+    }
+
+
+    [ServerRpc]
+    void TakeDamageServerRpc(int damage)
+    {
+        bossStat.Health -= damage;
+        sliderHp.value = bossStat.Health;
+        TakeDamageClientRpc(bossStat.Health);
+    }
+
+    [ClientRpc]
+    void TakeDamageClientRpc(int health)
+    {
+        sliderHp.value = health;
+    }
+
+    [ClientRpc]
+    void OnBirthClientRpc(Color serverColor, int bossHealth)
+    {
+        isDead = false;
+        color = serverColor;
+        bossStat.Health = bossHealth;
+        sliderHp.maxValue = bossHealth;
+        sliderHp.value = bossHealth;
+    }
+
+    [ServerRpc]
+    void UpdateColorServerRpc()
+    {
+        UpdateColorClientRpc(color);
+        monsterSprite.color = color;
+    }
+
+    [ClientRpc]
+    void UpdateColorClientRpc(Color serverColor)
+    {
+        monsterSprite.color = serverColor;
+    }
+
+
+
+
+
 
 
 }
