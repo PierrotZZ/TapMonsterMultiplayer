@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerData
 {
-    public string playerName;
+    public string PlayerName;
     public int Damage;
     public int Money;
     public float fireRate;

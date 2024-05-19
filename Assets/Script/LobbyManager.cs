@@ -44,7 +44,7 @@ public class LobbyManager : MonoBehaviour
         loginSectionBtn.onClick.AddListener(OnClickSectionloginBtn);
         signInSectionBtn.onClick.AddListener(OnClickSectionSignInBtn);
 
-        await Authenticate();
+        // await Authenticate();
     }
 
     private void OnClickSectionSignInBtn()
