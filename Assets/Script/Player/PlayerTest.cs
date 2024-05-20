@@ -6,7 +6,6 @@ using Unity.Netcode;
 
 public class PlayerTest : NetworkBehaviour
 {
-
     internal PlayerData playerData = new PlayerData();
     
     //Player data stat
