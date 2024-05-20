@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LobbyScene.unity
     guid: 14d00074b45f7c648940f8478a236640
+  - enabled: 1
+    path: Assets/Ome's Folder/Ome's Scene.unity
+    guid: a7c8f04cd67489741b2570c8cdfb55c8
+  - enabled: 1
+    path: Assets/Scenes/Gameplay.unity
+    guid: 2c232d44e4b9dd248bf4c33f04f2e7bb
   m_configObjects: {}

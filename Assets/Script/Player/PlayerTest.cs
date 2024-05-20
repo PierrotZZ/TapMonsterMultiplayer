@@ -8,11 +8,17 @@ public class PlayerTest : NetworkBehaviour
 {
 
     internal PlayerData playerData = new PlayerData();
+    
+    //Player data stat
     [SerializeField] internal int moneyPlayer;
     [SerializeField] internal int playerDamage;
+    [SerializeField] internal int playerDamageLevel;
+    [SerializeField] internal int playerDamagePrice;
     [SerializeField] internal float playerFirerate;
+    [SerializeField] internal int playerFireRateLevel;
+    [SerializeField] internal int playerFireRatePrice;
     [SerializeField] Animator animator;
-    float time;
+    internal float time;
     int num;
 
     private void Start()
@@ -34,24 +40,32 @@ public class PlayerTest : NetworkBehaviour
             time = 0;
         }
 
-        playerData.Damage = playerDamage;
-        playerData.fireRate = playerFirerate;
-        playerData.Money = moneyPlayer;
+        //Get data form "playerData"
+        //Money
+        moneyPlayer = playerData.Money;
+        //Damage
+        playerDamage = playerData.Damage;
+        playerDamageLevel = playerData.DamageLevel;
+        playerDamagePrice = playerData.DamagePrice;
+        //Fire rate
+        playerFirerate = playerData.fireRate;
+        playerFireRateLevel = playerData.FireRateLevel;
+        playerFireRatePrice = playerData.FireRatePrice;
 
     }
 
     void PlayAnimation()
     {
-        if (num == 0)
-        {
-            animator.SetTrigger("SwingLeft");
-            num++;
-        }
-        else
-        {
-            animator.SetTrigger("SwingRight");
-            num = 0;
-        }
+        // if (num == 0)
+        // {
+        //     animator.SetTrigger("SwingLeft");
+        //     num++;
+        // }
+        // else
+        // {
+        //     animator.SetTrigger("SwingRight");
+        //     num = 0;
+        // }
         if (!IsOwner) return;
         PlayAnimationServerRpc();
     }
@@ -61,12 +75,12 @@ public class PlayerTest : NetworkBehaviour
     {
         if (num == 0)
         {
-            animator.SetTrigger("SwingLeft");
+            animator.SetTrigger("SwingRight");
             num++;
         }
         else
         {
-            animator.SetTrigger("SwingRight");
+            animator.SetTrigger("SwingLeft");
             num = 0;
         }
     }
