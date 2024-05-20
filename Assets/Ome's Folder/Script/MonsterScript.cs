@@ -66,7 +66,6 @@ public class MonsterScript : NetworkBehaviour
 
     void Update()
     {
-        print(IsServer);
 
         if (!IsOwner) return;
         UpdateColorServerRpc();
@@ -107,11 +106,12 @@ public class MonsterScript : NetworkBehaviour
     [ServerRpc]
     void OnDeathServerRpc()
     {
+        int drop = Random.Range(5, 7);
         if (bossStat.Health <= 0 && !isDead)
         {
             isDead = true;
             animator.Play("DeathAnimation");
-            GameManager.Instance.AddMoney(moneyDrop);
+            GameManager.Instance.AddMoney(drop);
             OnDeathClientRpc();
         }
     }

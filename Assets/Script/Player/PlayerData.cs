@@ -9,4 +9,5 @@ public class PlayerData
     public int Damage;
     public int Money;
     public float fireRate;
+
 }

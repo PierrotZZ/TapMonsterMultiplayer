@@ -10,6 +10,7 @@ public class UiNetworkManager : MonoBehaviour
 
     [SerializeField] Button HostBotton;
     [SerializeField] Button ClientBotton;
+    [SerializeField] StatUpgradeManager statUpgradeManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,11 +22,13 @@ public class UiNetworkManager : MonoBehaviour
     private void OnClickClientBotton()
     {
         NetworkManager.Singleton.StartClient();
+        statUpgradeManager.StartCoroutine("GetPlayerInLobbyServerRpc");
     }
 
     private void OnClickHostBotton()
     {
         NetworkManager.Singleton.StartHost();
+        statUpgradeManager.StartCoroutine("GetPlayerInLobbyServerRpc");
     }
 
     // Update is called once per frame
