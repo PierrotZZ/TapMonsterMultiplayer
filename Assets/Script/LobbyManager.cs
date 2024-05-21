@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using Unity.Netcode;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
+using Unity.Networking.Transport.Relay;
+using Unity.Netcode.Transports.UTP;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -18,6 +24,8 @@ public class LobbyManager : MonoBehaviour
     public TMP_Text lobbyCodeText;
     Lobby hostLobby, joinnedLobby;
 
+    public Button startGameBtn;
+
 
     [Header("Login")]
     public CloudSaveManager cloudSaveManager;
@@ -25,9 +33,9 @@ public class LobbyManager : MonoBehaviour
     public TMP_InputField password;
     public TMP_InputField playerNameInput;
     public Button loginBtn;
-    public Button signInBtn;
+    public Button signUpBtn;
     public Button loginSectionBtn;
-    public Button signInSectionBtn;
+    public Button signUpSectionBtn;
     public GameObject selectSection;
     public GameObject loginSection;
 
@@ -36,6 +44,8 @@ public class LobbyManager : MonoBehaviour
 
 
     public string playerId;
+    string currentJoinCode = "";
+    string currentLobbyId;
 
     // Start is called before the first frame update
     async void Start()
@@ -43,10 +53,11 @@ public class LobbyManager : MonoBehaviour
         cloudSaveManager.lobbyManager = this;
         await UnityServices.InitializeAsync();
         loginBtn.onClick.AddListener(OnClickLogin);
-        signInBtn.onClick.AddListener(OnClickSingIn);
+        signUpBtn.onClick.AddListener(OnClickSingUp);
         loginSectionBtn.onClick.AddListener(OnClickSectionloginBtn);
-        signInSectionBtn.onClick.AddListener(OnClickSectionSignInBtn);
+        signUpSectionBtn.onClick.AddListener(OnClickSectionSignInBtn);
         backToManu.onClick.AddListener(OnClickBackToManu);
+        startGameBtn.onClick.AddListener(OnClickStartGame);
 
         // await Authenticate();
     }
@@ -55,7 +66,7 @@ public class LobbyManager : MonoBehaviour
     {
         loginSection.SetActive(false);
         loginBtn.gameObject.SetActive(false);
-        signInBtn.gameObject.SetActive(false);
+        signUpBtn.gameObject.SetActive(false);
         playerNameInput.gameObject.SetActive(false);
         usersName.text = "";
         password.text = "";
@@ -68,7 +79,7 @@ public class LobbyManager : MonoBehaviour
     {
         selectSection.gameObject.SetActive(false);
         loginSection.gameObject.SetActive(true);
-        signInBtn.gameObject.SetActive(true);
+        signUpBtn.gameObject.SetActive(true);
         playerNameInput.gameObject.SetActive(true);
         backToManu.gameObject.SetActive(true);
     }
@@ -79,13 +90,14 @@ public class LobbyManager : MonoBehaviour
         loginBtn.gameObject.SetActive(true);
         backToManu.gameObject.SetActive(true);
     }
-    private void OnClickSingIn()
+    private void OnClickSingUp()
     {
-        var respond = cloudSaveManager.SignIn(usersName.text, password.text, playerNameInput.text, true);
+        var respond = cloudSaveManager.SignUp(usersName.text, password.text, playerNameInput.text, true);
+
     }
     private void OnClickLogin()
     {
-        var respond = cloudSaveManager.SignIn(usersName.text, password.text, "", false);
+        var respond = cloudSaveManager.SignUp(usersName.text, password.text, "", false);
     }
     public void OpenIntroLobby()
     {
@@ -106,7 +118,6 @@ public class LobbyManager : MonoBehaviour
 
     async public void CreateLobby()
     {
-
         CreateLobbyOptions options = new CreateLobbyOptions
         {
             Player = GetPlayer()
@@ -117,11 +128,12 @@ public class LobbyManager : MonoBehaviour
         Debug.Log("Create lobby " + hostLobby.LobbyCode);
         InvokeRepeating("SendLobbyHeartBeat", 2, 2);
         ShowPlayer();
-
+        Debug.Log("Host lobby id" + hostLobby.Id);
         //Interface
         introLobby.SetActive(false);
         lobbyPanel.SetActive(true);
         lobbyCodeText.text = joinnedLobby.LobbyCode;
+        currentLobbyId = hostLobby.Id;
     }
 
     async public void JoinLobbyByCode()
@@ -137,6 +149,18 @@ public class LobbyManager : MonoBehaviour
         Debug.Log("Enter lobby " + joinnedLobby.LobbyCode);
         ShowPlayer();
 
+        LobbyEventCallbacks callbacks = new LobbyEventCallbacks();
+        callbacks.LobbyChanged += OnLobbyChanged;
+        try
+        {
+            var addedCallback = LobbyService.Instance.SubscribeToLobbyEventsAsync
+                    (joinnedLobby.Id, callbacks);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e.Reason);
+        }
+
         //Interface
         introLobby.SetActive(false);
         lobbyPanel.SetActive(true);
@@ -149,7 +173,7 @@ public class LobbyManager : MonoBehaviour
         {
             Data = new Dictionary<string, PlayerDataObject>
             {
-                {"name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerNameInput.text)}
+                {"name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, usersName.text)}
             }
         };
 
@@ -186,5 +210,92 @@ public class LobbyManager : MonoBehaviour
         }
 
         joinnedLobby = await LobbyService.Instance.GetLobbyAsync(joinnedLobby.Id);
+    }
+
+    void OnClickStartGame()
+    {
+        StartGame(currentLobbyId);
+    }
+
+    //Relay
+    //Client
+    private async void SetClientRelayConnection(string joinCode)
+    {
+        try
+        {
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            RelayServerData relayData = new RelayServerData(joinAllocation, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayData);
+            NetworkManager.Singleton.StartClient();
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    private void StartGameClient(string joinCode)
+    {
+        lobbyPanel.SetActive(false);
+        SetClientRelayConnection(joinCode);
+    }
+
+    //Host
+    private async void SetHostRelaytConnection(string lobbyId)
+    {
+        Allocation allocation = await RelayService.Instance.CreateAllocationAsync(5);
+
+        RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
+
+        currentJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+        Debug.Log(currentJoinCode);
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+        NetworkManager.Singleton.StartHost();
+
+        try
+        {
+            UpdateLobbyOptions updateLobbyOption = new UpdateLobbyOptions();
+            updateLobbyOption.Data = new Dictionary<string, DataObject>();
+            updateLobbyOption.Data.Add("IsStart", new DataObject(DataObject.VisibilityOptions.Member, currentJoinCode));
+
+            hostLobby = await LobbyService.Instance.UpdateLobbyAsync(lobbyId, updateLobbyOption);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+
+        Debug.Log(hostLobby.Data["IsStart"].Value);
+    }
+
+    public async void StartGame(string lobbyId)
+    {
+        SceneManager.LoadScene("Gameplay", LoadSceneMode.Additive);
+        lobbyPanel.SetActive(false);
+        SetHostRelaytConnection(lobbyId);
+    }
+
+    //lobby change
+    private void OnLobbyChanged(ILobbyChanges onChange)
+    {
+        if (onChange.PlayerJoined.Value != null)
+        {
+            Debug.Log(onChange.PlayerJoined.Value[0].Player.Data["PlayerName"].Value);
+        }
+
+        if (onChange.PlayerLeft.Value != null)
+        {
+            Debug.Log(onChange.PlayerLeft.Value[0]);
+        }
+
+        // Debug.Log(onChange.Data.Changed);
+        // Debug.Log(onChange.Data.ChangeType);
+        // Debug.Log(onChange.Data.Value);
+        if (onChange.Data.Changed == true)
+        {
+            Debug.Log(onChange.Data.Value["IsStart"].Value.Value);
+            StartGameClient(onChange.Data.Value["IsStart"].Value.Value);
+        }
     }
 }

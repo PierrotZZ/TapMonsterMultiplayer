@@ -21,10 +21,10 @@ public class GameManager : Singleton<GameManager>
         {
             if (players[i] != null)
             {
-                players[i].moneyPlayer += amount;
+                players[i].playerData.Money += amount;
             }
         }
-        TrackMoneyClientRpc(players[0].moneyPlayer);
+        TrackMoneyClientRpc(players[0].playerData.Money);
     }
 
     [ClientRpc]

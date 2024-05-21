@@ -50,16 +50,17 @@ public class StatUpgradeManager : MonoBehaviour
     void Update()
     {
         if (player == null) return;
-        moneyValue.text = player.moneyPlayer.ToString();
+        moneyValue.text = player.playerData.Money.ToString();
         UpdateSliderAttack();
     }
 
     void UpgradeFireRate()
     {
-        if (player.moneyPlayer >= fireRatePriceValue && fireRateLevel < 20)
+        if (player.playerData.Money >= fireRatePriceValue && fireRateLevel < 20)
         {
             fireRateLevel++;
-            player.playerFirerate -= 0.05f;
+            player.playerData.FireRateLevel++;
+            player.playerData.fireRate -= 0.05f;
 
             if (fireRateLevel <= 10)
             {
@@ -72,7 +73,7 @@ public class StatUpgradeManager : MonoBehaviour
 
             valueIntFireRate = (int)fireRatePriceValue;
 
-            player.moneyPlayer -= valueIntFireRate;
+            player.playerData.Money -= valueIntFireRate;
 
             UpdateStat();
         }
@@ -81,10 +82,11 @@ public class StatUpgradeManager : MonoBehaviour
 
     void UpgradeDamage()
     {
-        if (player.moneyPlayer >= fireRatePriceValue && damageLevel < 20)
+        if (player.playerData.Money >= damagePriceValue && damageLevel < 20)
         {
             damageLevel++;
-            player.playerDamage += 3;
+            player.playerData.DamageLevel++;
+            player.playerData.Damage += 3;
 
             if (damageLevel <= 10)
             {
@@ -97,7 +99,7 @@ public class StatUpgradeManager : MonoBehaviour
 
             valueIntDmg = (int)damagePriceValue;
 
-            player.moneyPlayer -= valueIntDmg;
+            player.playerData.Money -= valueIntDmg;
 
             UpdateStat();
         }
@@ -116,17 +118,17 @@ public class StatUpgradeManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         player = GameManager.Instance.players.Find(x => x.IsOwner);
         //Get stat player
-        valueIntDmg = player.playerDamagePrice;
-        damageLevel = player.playerDamageLevel;
-        valueIntFireRate = player.playerFireRatePrice;
-        fireRateLevel = player.playerFireRateLevel;
+        valueIntDmg = player.playerData.DamagePrice;
+        damageLevel = player.playerData.DamageLevel;
+        valueIntFireRate = player.playerData.FireRatePrice;
+        fireRateLevel = player.playerData.FireRateLevel;
         UpdateStat();
     }
 
     public void UpdateSliderAttack()
     {
         sliderCoolDownAtk.value = player.time;
-        sliderCoolDownAtk.maxValue = player.playerFirerate;
+        sliderCoolDownAtk.maxValue = player.playerData.fireRate;
     }
 
     public void UpdateStat()
@@ -134,11 +136,11 @@ public class StatUpgradeManager : MonoBehaviour
         //Fire rate interface
         fireRatePriceText.text = "Price : " + valueIntFireRate.ToString();
         fireRatelevelText.text = "Lv. : " + fireRateLevel.ToString();
-        fireRateValue.text = player.playerFirerate.ToString();
+        fireRateValue.text = player.playerData.fireRate.ToString();
 
         //Damage interface
         damagePriceText.text = "Price : " + valueIntDmg.ToString();
         damageLevelText.text = "Lv. : " + damageLevel.ToString();
-        damageValue.text = player.playerDamage.ToString();
+        damageValue.text = player.playerData.Damage.ToString();
     }
 }

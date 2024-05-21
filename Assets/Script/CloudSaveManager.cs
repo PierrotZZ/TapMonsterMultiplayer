@@ -81,7 +81,7 @@ public class CloudSaveManager : MonoBehaviour
             lobbyManager.password.text = "";
         }
     }
-    public async Task SignIn(string _users, string _password, string name, bool newUsers)
+    public async Task SignUp(string _users, string _password, string name, bool newUsers)
     {
         if (newUsers)
         {

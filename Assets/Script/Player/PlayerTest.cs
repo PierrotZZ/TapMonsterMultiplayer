@@ -6,22 +6,14 @@ using Unity.Netcode;
 
 public class PlayerTest : NetworkBehaviour
 {
-    internal PlayerData playerData = new PlayerData();
-    
-    //Player data stat
-    [SerializeField] internal int moneyPlayer;
-    [SerializeField] internal int playerDamage;
-    [SerializeField] internal int playerDamageLevel;
-    [SerializeField] internal int playerDamagePrice;
-    [SerializeField] internal float playerFirerate;
-    [SerializeField] internal int playerFireRateLevel;
-    [SerializeField] internal int playerFireRatePrice;
+    [SerializeField] public PlayerData playerData;
     [SerializeField] Animator animator;
     internal float time;
     int num;
 
     private void Start()
     {
+        playerData = new PlayerData();
         GameManager.Instance.players.Add(this);
         animator = GetComponentInChildren<Animator>();
     }
@@ -38,19 +30,6 @@ public class PlayerTest : NetworkBehaviour
             AttackMonsterServerRpc();
             time = 0;
         }
-
-        //Get data form "playerData"
-        //Money
-        moneyPlayer = playerData.Money;
-        //Damage
-        playerDamage = playerData.Damage;
-        playerDamageLevel = playerData.DamageLevel;
-        playerDamagePrice = playerData.DamagePrice;
-        //Fire rate
-        playerFirerate = playerData.fireRate;
-        playerFireRateLevel = playerData.FireRateLevel;
-        playerFireRatePrice = playerData.FireRatePrice;
-
     }
 
     void PlayAnimation()
@@ -87,7 +66,7 @@ public class PlayerTest : NetworkBehaviour
     [ServerRpc]
     void AttackMonsterServerRpc()
     {
-        GameManager.Instance.monster.TakeDamage(playerDamage);
+        GameManager.Instance.monster.TakeDamage(playerData.Damage);
     }
 
 
