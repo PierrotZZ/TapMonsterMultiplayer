@@ -31,6 +31,9 @@ public class LobbyManager : MonoBehaviour
     public GameObject selectSection;
     public GameObject loginSection;
 
+    public Button backToManu;
+    public TMP_Text error;
+
 
     public string playerId;
 
@@ -43,8 +46,22 @@ public class LobbyManager : MonoBehaviour
         signInBtn.onClick.AddListener(OnClickSingIn);
         loginSectionBtn.onClick.AddListener(OnClickSectionloginBtn);
         signInSectionBtn.onClick.AddListener(OnClickSectionSignInBtn);
+        backToManu.onClick.AddListener(OnClickBackToManu);
 
         // await Authenticate();
+    }
+
+    private void OnClickBackToManu()
+    {
+        loginSection.SetActive(false);
+        loginBtn.gameObject.SetActive(false);
+        signInBtn.gameObject.SetActive(false);
+        playerNameInput.gameObject.SetActive(false);
+        usersName.text = "";
+        password.text = "";
+        playerNameInput.text = "";
+        backToManu.gameObject.SetActive(false);
+        selectSection.SetActive(true);
     }
 
     private void OnClickSectionSignInBtn()
@@ -53,24 +70,24 @@ public class LobbyManager : MonoBehaviour
         loginSection.gameObject.SetActive(true);
         signInBtn.gameObject.SetActive(true);
         playerNameInput.gameObject.SetActive(true);
+        backToManu.gameObject.SetActive(true);
     }
     private void OnClickSectionloginBtn()
     {
         selectSection.gameObject.SetActive(false);
         loginSection.gameObject.SetActive(true);
         loginBtn.gameObject.SetActive(true);
+        backToManu.gameObject.SetActive(true);
     }
     private void OnClickSingIn()
     {
         var respond = cloudSaveManager.SignIn(usersName.text, password.text, playerNameInput.text, true);
-        OpenIntroLobby();
     }
     private void OnClickLogin()
     {
         var respond = cloudSaveManager.SignIn(usersName.text, password.text, "", false);
-        OpenIntroLobby();
     }
-    void OpenIntroLobby()
+    public void OpenIntroLobby()
     {
         introLobby.gameObject.SetActive(true);
         loginSection.SetActive(false);

@@ -13,112 +13,73 @@ using UnityEngine;
 public class CloudSaveManager : MonoBehaviour
 {
     [HideInInspector] public LobbyManager lobbyManager;
-    public string username;
-    public string password;
-    public TMP_Text textPlayer;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            var testsave = Save();
+            // var testsave = Save();
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             var testLoad = Load();
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            var testCreateAccount = CreateAccount("Admin", "Admin", "Admin");
-        }
-        textPlayer.text = AuthenticationService.Instance.PlayerId;
     }
-    void Start()
-    {
-        Dictionary<string, List<string>> a = new Dictionary<string, List<string>>();
-        List<string> playerInfo = new List<string>();
-        UsersPassword usersData = new UsersPassword();
-        usersData.Users = "username";
-        usersData.Password = "password";
-        playerInfo.Add("username");
-        playerInfo.Add("password");
-        a.Add("player1", playerInfo);
-        List<string> responPlayerInfo = new List<string>();
-        responPlayerInfo = a["player1"];
-        // Debug.Log(a["player1"]);
-        // Debug.Log(responPlayerInfo[0]);
-        // Debug.Log(responPlayerInfo[1]);
-        Dictionary<UsersPassword, string> b = new Dictionary<UsersPassword, string>();
-        UsersPassword newUsersData1 = new UsersPassword();
-        newUsersData1.Users = "username1";
-        newUsersData1.Password = "password2";
-        UsersPassword newUsersData2 = new UsersPassword();
-        newUsersData1.Users = "username2";
-        newUsersData1.Password = "password3";
-        UsersPassword newUsersData3 = new UsersPassword();
-        newUsersData1.Users = "username4";
-        newUsersData1.Password = "password5";
-        // b.Add(newUsersData1, "55265142582");
-        // b.Add(newUsersData2, "43787868789");
-        // b.Add(newUsersData3, "42824276787");
-        // Debug.Log(b.Values.Count);
-        foreach (KeyValuePair<UsersPassword, string> s in b)
-        {
-            if (s.Key == newUsersData1)
-            {
-                // Debug.Log("have user : " + s.Value);
-            }
-            else
-            {
-                // Debug.Log("not have user");
-            }
-        }
-
-        // var testSignUp = SignUpWithUsernamePasswordAsync("Admin", "Admin");
-    }
+    
     async Task SignUpWithUsernamePasswordAsync(string username, string password)
     {
         try
         {
             await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
+            lobbyManager.OpenIntroLobby();
             Debug.Log("SignUp is successful.");
+            Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
         }
         catch (AuthenticationException ex)
         {
             // Compare error code to AuthenticationErrorCodes
             // Notify the player with the proper error message
             // Debug.LogException(ex);
+            // Debug.Log("Username Has Already");
+            lobbyManager.error.text = "Username Has Already";
+            lobbyManager.usersName.text = "";
         }
         catch (RequestFailedException ex)
         {
             // Compare error code to CommonErrorCodes
             // Notify the player with the proper error message
             // Debug.LogException(ex);
-            Debug.Log(ex.Message);
-            Debug.Log("Insert at least 1 uppercase, 1 lowercase, 1 digit and 1 symbol. With minimum 8 characters and a maximum of 30");
-            Debug.Log("Usersname Has Already");
+            // Debug.Log("Insert at least 1 uppercase, 1 lowercase, 1 digit and 1 symbol. With minimum 8 characters and a maximum of 30");
+            lobbyManager.error.text = "Insert at least 1 uppercase, 1 lowercase, 1 digit and 1 symbol. With minimum 8 characters and a maximum of 30";
+            lobbyManager.password.text = "";
         }
-        Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
     }
     async Task SignInWithUsernamePasswordAsync(string username, string password)
     {
         try
         {
             await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
+            lobbyManager.OpenIntroLobby();
             Debug.Log("SignIn is successful.");
+            Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
         }
         catch (AuthenticationException ex)
         {
             // Compare error code to AuthenticationErrorCodes
             // Notify the player with the proper error message
-            Debug.LogException(ex);
+            // Debug.LogException(ex);
+            lobbyManager.usersName.text = "";
+            lobbyManager.password.text = "";
+            lobbyManager.error.text = "Invalid username or password";
         }
         catch (RequestFailedException ex)
         {
             // Compare error code to CommonErrorCodes
             // Notify the player with the proper error message
-            Debug.LogException(ex);
+            // Debug.LogException(ex);
+            lobbyManager.error.text = "Invalid username or password";
+            lobbyManager.usersName.text = "";
+            lobbyManager.password.text = "";
         }
-        Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
     }
     public async Task SignIn(string _users, string _password, string name, bool newUsers)
     {
@@ -134,25 +95,7 @@ public class CloudSaveManager : MonoBehaviour
             var SignIn = SignInWithUsernamePasswordAsync(_users, _password);
         }
     }
-    public async Task CreateAccount(string _username, string _password, string name)
-    {
-        UsersPassword newUsersPassword = new UsersPassword();
-        newUsersPassword.Users = _username;
-        newUsersPassword.Password = _password;
-        var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
-                , "CreateAccount"
-                , new Dictionary<string, object> { { "PlayerId", "" }, { "UsersPassword", newUsersPassword } });
-        Debug.Log(respond);
-        ResultContainerUsers resultContainerUsers = JsonUtility.FromJson<ResultContainerUsers>(respond);
-        Debug.Log(resultContainerUsers.results[0].value.UsersData._UsersData.Values);
-        UsersData receiveUsersData = resultContainerUsers.results[0].value.UsersData;
-        Debug.Log(receiveUsersData._UsersData.Values.Count);
-        foreach (KeyValuePair<UsersPassword, string> w in receiveUsersData._UsersData)
-        {
-            Debug.Log(w.Value);
-        }
-    }
-    public async Task Load()
+    public async Task<PlayerData> Load()
     {
         Debug.Log("LoadData");
         var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
@@ -160,23 +103,18 @@ public class CloudSaveManager : MonoBehaviour
                 , new Dictionary<string, object> { { "PlayerId", lobbyManager.playerId } });
         // Debug.Log(respond + " : respond");
         ResultContainer resultContainer = JsonUtility.FromJson<ResultContainer>(respond);
-        Debug.Log(resultContainer.results[0].value.Damage);
+        // Debug.Log(resultContainer.results[0].value.Damage);
+        PlayerData loadPlayerdata = new PlayerData();
+        loadPlayerdata.Damage = resultContainer.results[0].value.Damage;
+        return loadPlayerdata;
     }
     //Save
-    public async Task Save()
+    public async Task Save(PlayerData savePlayerData)
     {
         Debug.Log("SaveData");
-        PlayerData testPlayerData = new PlayerData();
-        testPlayerData.PlayerName = "Test1";
-        testPlayerData.Damage = 100;
-        testPlayerData.Money = 500;
-        testPlayerData.fireRate = 50f;
-        testPlayerData.PlayerName = "Test1";
-        string jsonDefaultData = JsonConvert.SerializeObject(testPlayerData);
-        Debug.Log(jsonDefaultData.ToString());
         var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
         , "SavePlayerData"
-        , new Dictionary<string, object> { { "PlayerId", lobbyManager.playerId }, { "_PlayerData", testPlayerData } });
+        , new Dictionary<string, object> { { "PlayerId", lobbyManager.playerId }, { "_PlayerData", savePlayerData } });
         Debug.Log(respond);
     }
 }
