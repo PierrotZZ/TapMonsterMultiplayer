@@ -271,7 +271,7 @@ public class LobbyManager : MonoBehaviour
 
     public async void StartGame(string lobbyId)
     {
-        SceneManager.LoadScene("Gameplay", LoadSceneMode.Additive);
+        SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
         lobbyPanel.SetActive(false);
         SetHostRelaytConnection(lobbyId);
     }
