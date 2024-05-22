@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] internal List<PlayerTest> players = new List<PlayerTest>();
-    [SerializeField] GameObject[] playerSprite;
+    [SerializeField] Transform[] spawnTransform;
     [SerializeField] internal MonsterScript monster;
     // Start is called before the first frame update
 
@@ -42,38 +42,51 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        UpdateSprite();
+        UpdatePosition();
     }
 
 
-    void UpdateSprite()
+    void UpdatePosition()
     {
+
+        if (players == null) return;
+
         switch (players.Count)
         {
-            case 0:
-                playerSprite[0].SetActive(false);
-                playerSprite[1].SetActive(false);
-                playerSprite[2].SetActive(false);
-                break;
-
             case 1:
-                playerSprite[0].SetActive(true);
-                playerSprite[1].SetActive(false);
-                playerSprite[2].SetActive(false);
+                players[0].transform.position = spawnTransform[0].position;
                 break;
-
             case 2:
-                playerSprite[0].SetActive(true);
-                playerSprite[1].SetActive(true);
-                playerSprite[2].SetActive(false);
+                players[1].transform.position = spawnTransform[1].position;
                 break;
             case 3:
-                playerSprite[0].SetActive(true);
-                playerSprite[1].SetActive(true);
-                playerSprite[2].SetActive(true);
+                players[2].transform.position = spawnTransform[2].position;
                 break;
+            default:
+                return;
 
         }
+
+
+
+
+
+        // if (players[0] != null)
+        // {
+        //     players[0].transform.position = spawnTransform[0].position;
+        // }
+
+        // if (players[1] != null)
+        // {
+        //     players[1].transform.position = spawnTransform[1].position;
+        // }
+
+        // if (players[2] != null)
+        // {
+        //     players[2].transform.position = spawnTransform[2].position;
+        // }
+
+
     }
 
 }

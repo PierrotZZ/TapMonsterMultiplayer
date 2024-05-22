@@ -42,6 +42,7 @@ public class StatUpgradeManager : MonoBehaviour
 
         fireRateUpgradeButton.onClick.AddListener(UpgradeFireRate);
         damageUpgradeButton.onClick.AddListener(UpgradeDamage);
+
     }
 
 
@@ -49,9 +50,19 @@ public class StatUpgradeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player == null) return;
-        moneyValue.text = player.playerData.Money.ToString();
-        UpdateSliderAttack();
+        if (player == null)
+        {
+            StartCoroutine(GetPlayerInLobbyServerRpc());
+        }
+        else
+        {
+            moneyValue.text = player.playerData.Money.ToString();
+            UpdateSliderAttack();
+
+        }
+
+
+
     }
 
     void UpgradeFireRate()
@@ -118,11 +129,14 @@ public class StatUpgradeManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         player = GameManager.Instance.players.Find(x => x.IsOwner);
         //Get stat player
-        valueIntDmg = player.playerData.DamagePrice;
-        damageLevel = player.playerData.DamageLevel;
-        valueIntFireRate = player.playerData.FireRatePrice;
-        fireRateLevel = player.playerData.FireRateLevel;
-        UpdateStat();
+        if (player != null)
+        {
+            valueIntDmg = player.playerData.DamagePrice;
+            damageLevel = player.playerData.DamageLevel;
+            valueIntFireRate = player.playerData.FireRatePrice;
+            fireRateLevel = player.playerData.FireRateLevel;
+            UpdateStat();
+        }
     }
 
     public void UpdateSliderAttack()
