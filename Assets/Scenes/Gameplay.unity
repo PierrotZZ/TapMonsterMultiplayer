@@ -4464,6 +4464,7 @@ MonoBehaviour:
   - {fileID: 1369371389}
   - {fileID: 1863487020}
   monster: {fileID: 839635546}
+  statUpgradeManager: {fileID: 943052994}
 --- !u!114 &1546213088
 MonoBehaviour:
   m_ObjectHideFlags: 0

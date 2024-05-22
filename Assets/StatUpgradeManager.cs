@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class StatUpgradeManager : MonoBehaviour
 {
-    [SerializeField] PlayerTest player;
+    [SerializeField] internal PlayerTest player;
     [SerializeField] Button button;
     [SerializeField] TextMeshProUGUI moneyValue;
 

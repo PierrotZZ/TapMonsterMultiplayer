@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] internal List<PlayerTest> players = new List<PlayerTest>();
     [SerializeField] Transform[] spawnTransform;
     [SerializeField] internal MonsterScript monster;
+    [SerializeField] StatUpgradeManager statUpgradeManager;
     // Start is called before the first frame update
 
     private void Awake()
@@ -24,7 +25,12 @@ public class GameManager : Singleton<GameManager>
                 players[i].playerData.Money += amount;
             }
         }
-        TrackMoneyClientRpc(players[0].playerData.Money);
+        //TrackMoneyClientRpc(players[0].playerData.Money);
+    }
+
+    public void AddMoney02(int amount)
+    {
+        statUpgradeManager.player.playerData.Money += amount;
     }
 
     [ClientRpc]
@@ -66,10 +72,6 @@ public class GameManager : Singleton<GameManager>
                 return;
 
         }
-
-
-
-
 
         // if (players[0] != null)
         // {

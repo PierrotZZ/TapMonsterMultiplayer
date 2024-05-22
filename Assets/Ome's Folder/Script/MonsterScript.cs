@@ -111,7 +111,6 @@ public class MonsterScript : NetworkBehaviour
         {
             isDead = true;
             animator.Play("DeathAnimation");
-            GameManager.Instance.AddMoney(drop);
             OnDeathClientRpc();
         }
     }
@@ -171,6 +170,11 @@ public class MonsterScript : NetworkBehaviour
         monsterSprite.color = serverColor;
     }
 
+    void OnDisable()
+    {
+        int drop = Random.Range(5, 7);
+        GameManager.Instance.AddMoney02(drop);
+    }
 
 
 
