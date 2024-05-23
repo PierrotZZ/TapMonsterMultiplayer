@@ -274,6 +274,7 @@ public class LobbyManager : MonoBehaviour
         SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
         lobbyPanel.SetActive(false);
         SetHostRelaytConnection(lobbyId);
+        CloudSaveManager.Instance._lobbyId = lobbyId;
     }
 
     //lobby change

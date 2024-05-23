@@ -13,19 +13,24 @@ using UnityEngine;
 public class CloudSaveManager : Singleton<CloudSaveManager>
 {
     [HideInInspector] public LobbyManager lobbyManager;
+    public string _lobbyId;
     public string _playerId;
+    internal PlayerData _playerData = new PlayerData();
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            // var testsave = Save();
+            PlayerData test = new PlayerData();
+            test.Damage = 20;
+            var _Save = Save(test);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var testLoad = Load();
+            var _Load = Load();
+            // Debug.Log(_playerData.Damage);
         }
     }
-    
+
     async Task SignUpWithUsernamePasswordAsync(string username, string password)
     {
         try
@@ -35,6 +40,7 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
             Debug.Log("SignUp is successful.");
             Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
             _playerId = AuthenticationService.Instance.PlayerId;
+            var _Load = Load();
         }
         catch (AuthenticationException ex)
         {
@@ -64,6 +70,7 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
             Debug.Log("SignIn is successful.");
             Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
             _playerId = AuthenticationService.Instance.PlayerId;
+            var _Load = Load();
         }
         catch (AuthenticationException ex)
         {
@@ -100,16 +107,31 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
     }
     public async Task<PlayerData> Load()
     {
-        Debug.Log("LoadData");
-        var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
-                , "LoadPlayerData"
-                , new Dictionary<string, object> { { "PlayerId", _playerId } });
-        // Debug.Log(respond + " : respond");
-        ResultContainer resultContainer = JsonUtility.FromJson<ResultContainer>(respond);
-        // Debug.Log(resultContainer.results[0].value.Damage);
         PlayerData loadPlayerdata = new PlayerData();
-        loadPlayerdata.Damage = resultContainer.results[0].value.Damage;
+        try
+        {
+            Debug.Log("LoadData");
+            var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
+                    , "LoadPlayerData"
+                    , new Dictionary<string, object> { { "PlayerId", _playerId } });
+            // Debug.Log(respond + " : respond");
+            ResultContainer resultContainer = JsonUtility.FromJson<ResultContainer>(respond);
+            // Debug.Log(resultContainer.results[0].value.Damage);
+            _playerData.PlayerName = resultContainer.results[0].value.PlayerName;
+            _playerData.Damage = resultContainer.results[0].value.Damage;
+            _playerData.DamageLevel = resultContainer.results[0].value.DamageLevel;
+            _playerData.DamagePrice = resultContainer.results[0].value.DamagePrice;
+            _playerData.Money = resultContainer.results[0].value.Money;
+            _playerData.fireRate = resultContainer.results[0].value.fireRate;
+            _playerData.FireRatePrice = resultContainer.results[0].value.FireRatePrice;
+            _playerData.FireRateLevel = resultContainer.results[0].value.FireRateLevel;
+        }
+        catch (AuthenticationException ex)
+        {
+            Debug.Log(ex);
+        }
         return loadPlayerdata;
+
     }
     //Save
     public async Task Save(PlayerData savePlayerData)
@@ -144,7 +166,7 @@ public class Value
     public string PlayerName;
     public int Damage;
     public int DamageLevel;
-    public int DamagePrice ;
+    public int DamagePrice;
     public int Money;
     public float fireRate;
     public int FireRatePrice;

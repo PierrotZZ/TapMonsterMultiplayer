@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Services.Lobbies;
 
 public class PlayerTest : NetworkBehaviour
 {
@@ -11,9 +12,18 @@ public class PlayerTest : NetworkBehaviour
     internal float time;
     int num;
 
+    private void OnApplicationQuit()
+    {
+
+    }
+    public override void OnDestroy()
+    {
+        var _Save = CloudSaveManager.Instance.Save(playerData);
+        NetworkManager.Singleton.Shutdown();
+    }
     private void Start()
-    {   
-        playerData = CloudSaveManager.Instance.Load().Result;
+    {
+        playerData = CloudSaveManager.Instance._playerData;
         GameManager.Instance.players.Add(this);
         animator = GetComponentInChildren<Animator>();
     }

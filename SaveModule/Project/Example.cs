@@ -23,15 +23,17 @@ public class MyModule
     [CloudCodeFunction("SavePlayerData")]
     public async Task<string> SavePlayerData(IExecutionContext ctx, IGameApiClient gameApiClient, string PlayerId,PlayerData _PlayerData)
     {
-        //PlayerData a = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerData>(_PlayerData);
-
         PlayerData savePlayerData = new PlayerData();
         savePlayerData.PlayerName = _PlayerData.PlayerName;
         savePlayerData.Damage = _PlayerData.Damage;
+        savePlayerData.DamageLevel = _PlayerData.DamageLevel;
+        savePlayerData.DamagePrice = _PlayerData.DamagePrice;
         savePlayerData.Money = _PlayerData.Money;
-        savePlayerData.FireRate = _PlayerData.FireRate;
+        savePlayerData.fireRate = _PlayerData.fireRate;
+        savePlayerData.FireRatePrice = _PlayerData.FireRatePrice;
+        savePlayerData.FireRateLevel = _PlayerData.FireRateLevel;
         var respond = await gameApiClient.CloudSaveData.SetItemAsync(ctx, ctx.AccessToken
-            , "518daf08-ebfa-43b7-ba32-7d0be30f82fa", PlayerId, new SetItemBody("PlayerData",savePlayerData));
+            , "518daf08-ebfa-43b7-ba32-7d0be30f82fa", PlayerId, new SetItemBody("PlayerData", _PlayerData));
         string jsonDefaultData = JsonConvert.SerializeObject(savePlayerData);
         //return jsonDefaultData;
         return jsonDefaultData;
@@ -49,7 +51,6 @@ public class MyModule
         else
         {
             string palyerDataJson = respond.Data.ToJson();
-            //string palyerDataJson = respond.Data.ToJson();
             return palyerDataJson;
         }
     }
@@ -59,13 +60,15 @@ public class MyModule
     {
         PlayerData newPlayerData = new PlayerData();
         newPlayerData.PlayerName = "";
-        UsersPassword usersAndPassword = new UsersPassword();
-        usersAndPassword.Users = "users1";
-        usersAndPassword.Password = "users2";
-        UsersData usersData = new UsersData();
-        usersData._UsersData.Add(usersAndPassword, PlayerId);
-        
-        var respond = gameApiClient.CloudSaveData.SetItemAsync(ctx, ctx.AccessToken,
+        newPlayerData.Damage = 3;
+        newPlayerData.DamageLevel  = 1;
+        newPlayerData.DamagePrice = 50;
+        newPlayerData.Money  = 0;
+        newPlayerData.fireRate = 1;
+        newPlayerData.FireRatePrice = 50;
+        newPlayerData.FireRateLevel = 1;
+
+    var respond = gameApiClient.CloudSaveData.SetItemAsync(ctx, ctx.AccessToken,
             "518daf08-ebfa-43b7-ba32-7d0be30f82fa", PlayerId, new SetItemBody("PlayerData", newPlayerData));
         string jsonDefaultData = JsonConvert.SerializeObject(newPlayerData);
         return jsonDefaultData;
