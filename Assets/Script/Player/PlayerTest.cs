@@ -12,8 +12,8 @@ public class PlayerTest : NetworkBehaviour
     int num;
 
     private void Start()
-    {
-        playerData = new PlayerData();
+    {   
+        playerData = CloudSaveManager.Instance.Load().Result;
         GameManager.Instance.players.Add(this);
         animator = GetComponentInChildren<Animator>();
     }

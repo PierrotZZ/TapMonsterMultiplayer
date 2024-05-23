@@ -70,40 +70,16 @@ public class MyModule
         string jsonDefaultData = JsonConvert.SerializeObject(newPlayerData);
         return jsonDefaultData;
     }
-    [CloudCodeFunction("Login")]
-    public async Task Login(IExecutionContext ctx, IGameApiClient gameApiClient, string UsersPassword)
-    {
-          
-    }
-    [CloudCodeFunction("CreateAccount")]
-    public async Task<string> CreateAccount(IExecutionContext ctx, IGameApiClient gameApiClient,string PlayerId, UsersPassword UsersPassword)
-    {
-        /*var respond = await gameApiClient.CloudSaveData.GetItemsAsync(ctx, ctx.AccessToken,
-            "518daf08-ebfa-43b7-ba32-7d0be30f82fa", "R4DThHjctqOJWw08YQE2KJQmwZw6", new List<string> { "UsersData" });*/
-        UsersPassword usersData1 = new UsersPassword();
-        usersData1.Users = "Admin1";
-        usersData1.Password = "Admin1";
-        UsersPassword usersData2 = new UsersPassword();
-        usersData2.Users = "Admin2";
-        usersData2.Password = "Admin2";
-        UsersData _usersData = new UsersData();
-        _usersData._UsersData = new Dictionary<UsersPassword, string>();
-        _usersData._UsersData.Add(usersData1,"Admin1");
-        _usersData._UsersData.Add(usersData2,"Admin2");
-
-        var respond = await gameApiClient.CloudSaveData.SetItemAsync(ctx, ctx.AccessToken
-            , "518daf08-ebfa-43b7-ba32-7d0be30f82fa", "R4DThHjctqOJWw08YQE2KJQmwZw6", new SetItemBody("UsersData", _usersData));
-        // UsersData usersData = 
-
-        return respond.Data.ToJson();
-    }
     public class PlayerData
     {
         public string PlayerName;
-        public int Level;
         public int Damage;
+        public int DamageLevel;
+        public int DamagePrice;
         public int Money;
-        public float FireRate;
+        public float fireRate;
+        public int FireRatePrice;
+        public int FireRateLevel;
     }   
     public class UsersData
     {

@@ -10,9 +10,10 @@ using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CloudSaveManager : MonoBehaviour
+public class CloudSaveManager : Singleton<CloudSaveManager>
 {
     [HideInInspector] public LobbyManager lobbyManager;
+    public string _playerId;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -33,6 +34,7 @@ public class CloudSaveManager : MonoBehaviour
             lobbyManager.OpenIntroLobby();
             Debug.Log("SignUp is successful.");
             Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
+            _playerId = AuthenticationService.Instance.PlayerId;
         }
         catch (AuthenticationException ex)
         {
@@ -61,6 +63,7 @@ public class CloudSaveManager : MonoBehaviour
             lobbyManager.OpenIntroLobby();
             Debug.Log("SignIn is successful.");
             Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
+            _playerId = AuthenticationService.Instance.PlayerId;
         }
         catch (AuthenticationException ex)
         {
@@ -100,7 +103,7 @@ public class CloudSaveManager : MonoBehaviour
         Debug.Log("LoadData");
         var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
                 , "LoadPlayerData"
-                , new Dictionary<string, object> { { "PlayerId", lobbyManager.playerId } });
+                , new Dictionary<string, object> { { "PlayerId", _playerId } });
         // Debug.Log(respond + " : respond");
         ResultContainer resultContainer = JsonUtility.FromJson<ResultContainer>(respond);
         // Debug.Log(resultContainer.results[0].value.Damage);
@@ -114,7 +117,7 @@ public class CloudSaveManager : MonoBehaviour
         Debug.Log("SaveData");
         var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
         , "SavePlayerData"
-        , new Dictionary<string, object> { { "PlayerId", lobbyManager.playerId }, { "_PlayerData", savePlayerData } });
+        , new Dictionary<string, object> { { "PlayerId", _playerId }, { "_PlayerData", savePlayerData } });
         Debug.Log(respond);
     }
 }
@@ -140,8 +143,12 @@ public class Value
 {
     public string PlayerName;
     public int Damage;
+    public int DamageLevel;
+    public int DamagePrice ;
     public int Money;
-    public float FireRate;
+    public float fireRate;
+    public int FireRatePrice;
+    public int FireRateLevel;
 }
 [System.Serializable]
 public class Modified
