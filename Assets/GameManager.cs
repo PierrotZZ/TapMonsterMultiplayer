@@ -55,23 +55,26 @@ public class GameManager : Singleton<GameManager>
     void UpdatePosition()
     {
 
-        if (players == null) return;
-
-        switch (players.Count)
+        if (players != null)
         {
-            case 1:
-                players[0].transform.position = spawnTransform[0].position;
-                break;
-            case 2:
-                players[1].transform.position = spawnTransform[1].position;
-                break;
-            case 3:
-                players[2].transform.position = spawnTransform[2].position;
-                break;
-            default:
-                return;
+            switch (players.Count)
+            {
+                case 1:
+                    players[0].transform.position = spawnTransform[0].position;
+                    break;
+                case 2:
+                    players[1].transform.position = spawnTransform[1].position;
+                    break;
+                case 3:
+                    players[2].transform.position = spawnTransform[2].position;
+                    break;
+                default:
+                    return;
 
+            }
         }
+
+
 
         // if (players[0] != null)
         // {
