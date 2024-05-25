@@ -49,6 +49,7 @@ public class GameManager : Singleton<GameManager>
     private void Update()
     {
         UpdatePosition();
+        //HostOutClientRpc();
     }
 
 
@@ -76,6 +77,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
+
         // if (players[0] != null)
         // {
         //     players[0].transform.position = spawnTransform[0].position;
@@ -93,5 +95,14 @@ public class GameManager : Singleton<GameManager>
 
 
     }
+
+    [ClientRpc]
+    internal void HostOutClientRpc()
+    {
+        NetworkManager.Singleton.Shutdown();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+        Debug.Log("Host shut down the server.");
+    }
+
 
 }

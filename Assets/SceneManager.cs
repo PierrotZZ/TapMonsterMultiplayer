@@ -35,25 +35,25 @@ public class SceneManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hostHasQuit)
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
-            ShowNotificationServerRpc();
-        }
+
     }
 
     void BackToLobby()
     {
-        ShutdownServerRpc();
-        if (NetworkManager.Singleton.IsClient)
+        // ShutdownServerRpc();
+        if (!NetworkManager.Singleton.IsServer)
         {
             NetworkManager.Singleton.Shutdown();
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
             Debug.Log("Client disconnected from server.");
+            
         }
-        else if (NetworkManager.Singleton.IsHost)
+        else if (NetworkManager.Singleton.IsServer)
         {
             NetworkManager.Singleton.Shutdown();
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
             Debug.Log("Host shut down the server.");
+            GameManager.Instance.HostOutClientRpc();
         }
         //NetworkManager.Singleton.Shutdown();
     }
