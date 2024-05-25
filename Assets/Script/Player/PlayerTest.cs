@@ -19,7 +19,7 @@ public class PlayerTest : NetworkBehaviour
     public override void OnDestroy()
     {
         var _Save = CloudSaveManager.Instance.Save(playerData);
-        NetworkManager.Singleton.Shutdown();
+        //NetworkManager.Singleton.Shutdown();
     }
     private void Start()
     {

@@ -16,6 +16,10 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
     public string _lobbyId;
     public string _playerId;
     internal PlayerData _playerData = new PlayerData();
+
+    [Header("Get Login 1 time")]
+    public string username;
+    public bool statusLoginCheck;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))

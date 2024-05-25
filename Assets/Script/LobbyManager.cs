@@ -19,7 +19,7 @@ using UnityEngine.SceneManagement;
 public class LobbyManager : MonoBehaviour
 {
     public TMP_InputField lobbyCodeInput;
-    public GameObject introLobby, lobbyPanel;
+    public GameObject introLobby, lobbyPanel, singInPanel;
     public TMP_Text[] playerNameText;
     public TMP_Text lobbyCodeText;
     Lobby hostLobby, joinnedLobby;
@@ -50,6 +50,8 @@ public class LobbyManager : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
+        CheckLogin();
+
         cloudSaveManager.lobbyManager = this;
         await UnityServices.InitializeAsync();
         loginBtn.onClick.AddListener(OnClickLogin);
@@ -98,6 +100,8 @@ public class LobbyManager : MonoBehaviour
     private void OnClickLogin()
     {
         var respond = cloudSaveManager.SignUp(usersName.text, password.text, "", false);
+        CloudSaveManager.Instance.username = usersName.text;
+        CloudSaveManager.Instance.statusLoginCheck = true;
     }
     public void OpenIntroLobby()
     {
@@ -173,7 +177,7 @@ public class LobbyManager : MonoBehaviour
         {
             Data = new Dictionary<string, PlayerDataObject>
             {
-                {"name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, usersName.text)}
+                {"name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, CloudSaveManager.Instance.username)}
             }
         };
 
@@ -297,6 +301,20 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log(onChange.Data.Value["IsStart"].Value.Value);
             StartGameClient(onChange.Data.Value["IsStart"].Value.Value);
+        }
+    }
+
+    void CheckLogin()
+    {
+        if (CloudSaveManager.Instance.statusLoginCheck)
+        {
+            singInPanel.SetActive(false);
+            introLobby.SetActive(true);
+        }
+        else
+        {
+            singInPanel.SetActive(true);
+            introLobby.SetActive(false);
         }
     }
 }

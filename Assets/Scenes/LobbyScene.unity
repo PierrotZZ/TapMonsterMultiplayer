@@ -2500,6 +2500,8 @@ MonoBehaviour:
   lobbyManager: {fileID: 0}
   _lobbyId: 
   _playerId: 
+  username: 
+  statusLoginCheck: 0
 --- !u!4 &619406444
 Transform:
   m_ObjectHideFlags: 0
@@ -4761,6 +4763,7 @@ MonoBehaviour:
   lobbyCodeInput: {fileID: 1663867025}
   introLobby: {fileID: 1641489179}
   lobbyPanel: {fileID: 1205911567}
+  singInPanel: {fileID: 1201923530}
   playerNameText:
   - {fileID: 1637192872}
   - {fileID: 2055074470}

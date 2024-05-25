@@ -11,9 +11,14 @@ using Unity.Collections;
 public class SceneManagerScript : MonoBehaviour
 {
     [SerializeField] Button quitButton;
+
     [SerializeField] StatUpgradeManager statUpgradeManager;
 
     [SerializeField] bool hostHasQuit = false;
+
+    [Header("Notifacation host quit")]
+    [SerializeField] Button quitButtonClient;
+    [SerializeField] GameObject notificationHostQuit;
 
     // Start is called before the first frame update
 
@@ -24,6 +29,7 @@ public class SceneManagerScript : MonoBehaviour
     void Start()
     {
         quitButton.onClick.AddListener(BackToLobby); //Add function to the button
+        quitButtonClient.onClick.AddListener(BackToLobby); //Add function to the button
     }
 
     // Update is called once per frame
@@ -32,12 +38,23 @@ public class SceneManagerScript : MonoBehaviour
         if (hostHasQuit)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+            ShowNotificationServerRpc();
         }
     }
 
     void BackToLobby()
     {
         ShutdownServerRpc();
+        if (NetworkManager.Singleton.IsClient)
+        {
+            NetworkManager.Singleton.Shutdown();
+            Debug.Log("Client disconnected from server.");
+        }
+        else if (NetworkManager.Singleton.IsHost)
+        {
+            NetworkManager.Singleton.Shutdown();
+            Debug.Log("Host shut down the server.");
+        }
         //NetworkManager.Singleton.Shutdown();
     }
 
@@ -52,6 +69,12 @@ public class SceneManagerScript : MonoBehaviour
     void ClientQuitClientRpc(bool quit)
     {
         hostHasQuit = quit;
+    }
+
+    [ServerRpc]
+    void ShowNotificationServerRpc()
+    {
+        notificationHostQuit.SetActive(true);
     }
 
 }
