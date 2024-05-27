@@ -10,7 +10,7 @@ public class PlayerData
     public int Damage = 3;
     public int DamageLevel = 1;
     public int DamagePrice = 50;
-    public int Money = 500;
+    public int Money = 0;
     public float fireRate = 1;
     public int FireRatePrice = 50;
     public int FireRateLevel = 1;

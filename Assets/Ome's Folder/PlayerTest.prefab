@@ -218,7 +218,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: f7e923a0de95d884f886d8d687e6dc30, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3571188898
+  GlobalObjectIdHash: 2939963935
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -567,11 +567,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1336d3a68e0b344449e2146c3bca1bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyPlayer: 500
-  playerDamage: 3
-  playerDamageLevel: 0
-  playerDamagePrice: 0
-  playerFirerate: 1
-  playerFireRateLevel: 0
-  playerFireRatePrice: 0
+  playerData:
+    PlayerName: 
+    Damage: 3
+    DamageLevel: 1
+    DamagePrice: 50
+    Money: 0
+    fireRate: 1
+    FireRatePrice: 50
+    FireRateLevel: 1
   animator: {fileID: 0}

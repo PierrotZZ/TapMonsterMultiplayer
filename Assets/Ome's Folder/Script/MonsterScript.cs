@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
+using System.Collections;
 
 public class MonsterScript : NetworkBehaviour
 {
@@ -14,6 +15,13 @@ public class MonsterScript : NetworkBehaviour
     [SerializeField] Slider sliderHp;
     [SerializeField] SpriteRenderer monsterSprite;
 
+    [Header("Hurt effect")]
+    [SerializeField] Material flashMaterial;
+    [SerializeField] float durationEffect;
+    [SerializeField] GameObject hurtEffectObj;
+    SpriteRenderer spriteRenderer;
+    Material originMaterial;
+    Coroutine flashRoutine;
 
     // [Header("Properties")]
     //[SerializeField] float fadeSpeed;
@@ -22,7 +30,8 @@ public class MonsterScript : NetworkBehaviour
     {
         animator = GetComponent<Animator>();
 
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originMaterial = spriteRenderer.material;
     }
 
     private void Start()
@@ -75,6 +84,7 @@ public class MonsterScript : NetworkBehaviour
     public void TakeDamage(int damage)
     {
         TakeDamageServerRpc(damage);
+        Flash();
         OnDeathServerRpc();
     }
 
@@ -176,9 +186,24 @@ public class MonsterScript : NetworkBehaviour
         GameManager.Instance.AddMoney02(drop);
     }
 
+    //Hurt
+    public void Flash()
+    {
+        if (flashRoutine != null)
+        {
+            StopCoroutine(flashRoutine);
+        }
+        flashRoutine = StartCoroutine(FlashRoutine());
+    }
 
-
-
-
+    private IEnumerator FlashRoutine()
+    {
+        spriteRenderer.material = flashMaterial;
+        hurtEffectObj.SetActive(true);
+        yield return new WaitForSeconds(durationEffect);
+        hurtEffectObj.SetActive(false);
+        spriteRenderer.material = originMaterial;
+        flashRoutine = null;
+    }
 
 }

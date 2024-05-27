@@ -9,6 +9,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Transform[] spawnTransform;
     [SerializeField] internal MonsterScript monster;
     [SerializeField] StatUpgradeManager statUpgradeManager;
+
+    [SerializeField] GameObject clientQuitPanel;
     // Start is called before the first frame update
 
     private void Awake()
@@ -99,8 +101,9 @@ public class GameManager : Singleton<GameManager>
     [ClientRpc]
     internal void HostOutClientRpc()
     {
-        NetworkManager.Singleton.Shutdown();
-        UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+        clientQuitPanel.SetActive(true);
+        //NetworkManager.Singleton.Shutdown();
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
         Debug.Log("Host shut down the server.");
     }
 
