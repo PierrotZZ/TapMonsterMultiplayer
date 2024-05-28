@@ -33,7 +33,7 @@ public class LobbyManager : MonoBehaviour
     public CloudSaveManager cloudSaveManager;
     public TMP_InputField usersName;
     public TMP_InputField password;
-    public TMP_InputField playerNameInput;
+    // public TMP_InputField playerNameInput;
     public Button loginBtn;
     public Button signUpBtn;
     public Button loginSectionBtn;
@@ -94,10 +94,10 @@ public class LobbyManager : MonoBehaviour
         loginSection.SetActive(false);
         loginBtn.gameObject.SetActive(false);
         signUpBtn.gameObject.SetActive(false);
-        playerNameInput.gameObject.SetActive(false);
+        //playerNameInput.gameObject.SetActive(false);
         usersName.text = "";
         password.text = "";
-        playerNameInput.text = "";
+        //playerNameInput.text = "";
         backToManu.gameObject.SetActive(false);
         selectSection.SetActive(true);
     }
@@ -107,7 +107,7 @@ public class LobbyManager : MonoBehaviour
         selectSection.gameObject.SetActive(false);
         loginSection.gameObject.SetActive(true);
         signUpBtn.gameObject.SetActive(true);
-        playerNameInput.gameObject.SetActive(true);
+        //playerNameInput.gameObject.SetActive(true);
         backToManu.gameObject.SetActive(true);
     }
     private void OnClickSectionloginBtn()
@@ -119,8 +119,9 @@ public class LobbyManager : MonoBehaviour
     }
     private void OnClickSingUp()
     {
-        var respond = cloudSaveManager.SignUp(usersName.text, password.text, playerNameInput.text, true);
-
+        var respond = cloudSaveManager.SignUp(usersName.text, password.text, "nu", true);
+        CloudSaveManager.Instance.username = usersName.text;
+        CloudSaveManager.Instance.statusLoginCheck = true;
     }
     private void OnClickLogin()
     {
