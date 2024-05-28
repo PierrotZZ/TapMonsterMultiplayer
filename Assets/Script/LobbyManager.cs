@@ -64,6 +64,8 @@ public class LobbyManager : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
+        Screen.SetResolution(1280, 720, false);
+
         CheckLogin();
 
         cloudSaveManager.lobbyManager = this;
