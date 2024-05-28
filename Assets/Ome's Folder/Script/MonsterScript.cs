@@ -84,7 +84,7 @@ public class MonsterScript : NetworkBehaviour
     public void TakeDamage(int damage)
     {
         TakeDamageServerRpc(damage);
-        Flash();
+        FlashServerRpc();
         OnDeathServerRpc();
     }
 
@@ -187,7 +187,19 @@ public class MonsterScript : NetworkBehaviour
     }
 
     //Hurt
-    public void Flash()
+    [ServerRpc]
+    public void FlashServerRpc()
+    {
+        FlashClientRpc();
+        if (flashRoutine != null)
+        {
+            StopCoroutine(flashRoutine);
+        }
+        flashRoutine = StartCoroutine(FlashRoutine());
+    }
+
+    [ClientRpc]
+    public void FlashClientRpc()
     {
         if (flashRoutine != null)
         {

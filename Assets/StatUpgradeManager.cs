@@ -58,11 +58,7 @@ public class StatUpgradeManager : MonoBehaviour
         {
             moneyValue.text = player.playerData.Money.ToString();
             UpdateSliderAttack();
-
         }
-
-
-
     }
 
     void UpgradeFireRate()
@@ -83,7 +79,7 @@ public class StatUpgradeManager : MonoBehaviour
             }
 
             valueIntFireRate = (int)fireRatePriceValue;
-
+            player.playerData.FireRatePrice = valueIntFireRate;
             player.playerData.Money -= valueIntFireRate;
 
             UpdateStat();
@@ -109,7 +105,7 @@ public class StatUpgradeManager : MonoBehaviour
             }
 
             valueIntDmg = (int)damagePriceValue;
-
+            player.playerData.DamagePrice = valueIntDmg;
             player.playerData.Money -= valueIntDmg;
 
             UpdateStat();
@@ -150,7 +146,7 @@ public class StatUpgradeManager : MonoBehaviour
         //Fire rate interface
         fireRatePriceText.text = "Price : " + valueIntFireRate.ToString();
         fireRatelevelText.text = "Lv. : " + fireRateLevel.ToString();
-        fireRateValue.text = player.playerData.fireRate.ToString();
+        fireRateValue.text = player.playerData.fireRate.ToString("F2");
 
         //Damage interface
         damagePriceText.text = "Price : " + valueIntDmg.ToString();

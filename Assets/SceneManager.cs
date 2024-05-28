@@ -55,6 +55,7 @@ public class SceneManagerScript : MonoBehaviour
             Debug.Log("Host shut down the server.");
             GameManager.Instance.HostOutClientRpc();
         }
+        var _Save = CloudSaveManager.Instance.Save(statUpgradeManager.player.playerData);
         //NetworkManager.Singleton.Shutdown();
     }
 

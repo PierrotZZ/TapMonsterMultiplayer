@@ -14,7 +14,7 @@ public class PlayerTest : NetworkBehaviour
 
     private void OnApplicationQuit()
     {
-
+        var _Save = CloudSaveManager.Instance.Save(playerData);
     }
     public override void OnDestroy()
     {

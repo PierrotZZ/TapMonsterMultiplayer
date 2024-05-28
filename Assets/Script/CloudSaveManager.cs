@@ -22,17 +22,17 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
     public bool statusLoginCheck;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            PlayerData test = new PlayerData();
-            test.Damage = 20;
-            var _Save = Save(test);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var _Load = Load();
-            // Debug.Log(_playerData.Damage);
-        }
+        // if (Input.GetKeyDown(KeyCode.Return))
+        // {
+        //     PlayerData test = new PlayerData();
+        //     test.Damage = 20;
+        //     var _Save = Save(test);
+        // }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     var _Load = Load();
+        //     // Debug.Log(_playerData.Damage);
+        // }
     }
 
     async Task SignUpWithUsernamePasswordAsync(string username, string password)

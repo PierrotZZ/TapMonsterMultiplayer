@@ -18,6 +18,8 @@ using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour
 {
+    public static event Action CallUpdateLobby;
+
     public TMP_InputField lobbyCodeInput;
     public GameObject introLobby, lobbyPanel, singInPanel;
     public TMP_Text[] playerNameText;
@@ -47,6 +49,18 @@ public class LobbyManager : MonoBehaviour
     string currentJoinCode = "";
     string currentLobbyId;
 
+    void OnEnable()
+    {
+        LobbyManager.CallUpdateLobby += UpdateLobby;
+        LobbyManager.CallUpdateLobby += ShowPlayer;
+    }
+
+    void OnDisable()
+    {
+        LobbyManager.CallUpdateLobby -= UpdateLobby;
+        LobbyManager.CallUpdateLobby -= ShowPlayer;
+    }
+
     // Start is called before the first frame update
     async void Start()
     {
@@ -62,6 +76,15 @@ public class LobbyManager : MonoBehaviour
         startGameBtn.onClick.AddListener(OnClickStartGame);
 
         // await Authenticate();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UpdateLobby();
+            ShowPlayer();
+        }
     }
 
     private void OnClickBackToManu()
@@ -130,7 +153,7 @@ public class LobbyManager : MonoBehaviour
         hostLobby = await Lobbies.Instance.CreateLobbyAsync("lobby", 3, options);
         joinnedLobby = hostLobby;
         Debug.Log("Create lobby " + hostLobby.LobbyCode);
-        InvokeRepeating("SendLobbyHeartBeat", 2, 2);
+        InvokeRepeating("SendLobbyHeartBeat", 10, 10);
         ShowPlayer();
         Debug.Log("Host lobby id" + hostLobby.Id);
         //Interface
@@ -164,6 +187,8 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log(e.Reason);
         }
+        
+        CallUpdateLobby?.Invoke();
 
         //Interface
         introLobby.SetActive(false);
@@ -204,6 +229,7 @@ public class LobbyManager : MonoBehaviour
             playerNameText[i].text = joinnedLobby.Players[i].Data["name"].Value;
             Debug.Log(joinnedLobby.Players[i].Data["name"].Value);
         }
+        Debug.Log("ShowPlayer");
     }
 
     async void UpdateLobby()
@@ -212,7 +238,7 @@ public class LobbyManager : MonoBehaviour
         {
             return;
         }
-
+        Debug.Log("UpdateLobby");
         joinnedLobby = await LobbyService.Instance.GetLobbyAsync(joinnedLobby.Id);
     }
 
@@ -287,6 +313,8 @@ public class LobbyManager : MonoBehaviour
         if (onChange.PlayerJoined.Value != null)
         {
             Debug.Log(onChange.PlayerJoined.Value[0].Player.Data["PlayerName"].Value);
+            UpdateLobby();
+            ShowPlayer();
         }
 
         if (onChange.PlayerLeft.Value != null)
