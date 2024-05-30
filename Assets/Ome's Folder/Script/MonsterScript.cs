@@ -22,6 +22,7 @@ public class MonsterScript : NetworkBehaviour
     SpriteRenderer spriteRenderer;
     Material originMaterial;
     Coroutine flashRoutine;
+    StatUpgradeManager statUpgradeManager;
 
     // [Header("Properties")]
     //[SerializeField] float fadeSpeed;
@@ -32,6 +33,7 @@ public class MonsterScript : NetworkBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         originMaterial = spriteRenderer.material;
+        statUpgradeManager = FindObjectOfType<StatUpgradeManager>();
     }
 
     private void Start()
@@ -83,7 +85,7 @@ public class MonsterScript : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
-        TakeDamageServerRpc(damage);
+        TakeDamageServerRpc(statUpgradeManager.player.playerData.Damage);
         FlashServerRpc();
         OnDeathServerRpc();
     }

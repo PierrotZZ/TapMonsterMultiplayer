@@ -19,6 +19,8 @@ public class SceneManagerScript : MonoBehaviour
     [Header("Notifacation host quit")]
     [SerializeField] Button quitButtonClient;
     [SerializeField] GameObject notificationHostQuit;
+    public bool canStart;
+    public GameObject blackDrop;
 
     // Start is called before the first frame update
 
@@ -28,6 +30,7 @@ public class SceneManagerScript : MonoBehaviour
     }
     void Start()
     {
+        StartCoroutine(DelayGameStart());
         quitButton.onClick.AddListener(BackToLobby); //Add function to the button
         quitButtonClient.onClick.AddListener(BackToLobby); //Add function to the button
     }
@@ -46,7 +49,7 @@ public class SceneManagerScript : MonoBehaviour
             NetworkManager.Singleton.Shutdown();
             UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
             Debug.Log("Client disconnected from server.");
-            
+
         }
         else if (NetworkManager.Singleton.IsServer)
         {
@@ -76,6 +79,15 @@ public class SceneManagerScript : MonoBehaviour
     void ShowNotificationServerRpc()
     {
         notificationHostQuit.SetActive(true);
+    }
+
+    IEnumerator DelayGameStart()
+    {
+        blackDrop.SetActive(true);
+        canStart = false;
+        yield return new WaitForSeconds(3f);
+        blackDrop.SetActive(false);
+        canStart = true;
     }
 
 }

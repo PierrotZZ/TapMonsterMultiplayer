@@ -4480,6 +4480,7 @@ MonoBehaviour:
   - {fileID: 1596760435}
   lobbyCodeText: {fileID: 1234873796}
   startGameBtn: {fileID: 1415647080}
+  leaveLobbyBtn: {fileID: 719769826}
   cloudSaveManager: {fileID: 619406443}
   usersName: {fileID: 1974642252}
   password: {fileID: 1059437789}
@@ -4491,6 +4492,7 @@ MonoBehaviour:
   loginSection: {fileID: 883069672}
   backToManu: {fileID: 1221890221}
   error: {fileID: 861656466}
+  hostId: 
   playerId: 
 --- !u!4 &1210020484
 Transform:

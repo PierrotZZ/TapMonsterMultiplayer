@@ -71,7 +71,6 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
         {
             await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
             lobbyManager.OpenIntroLobby();
-            Debug.Log("SignIn is successful.");
             Debug.Log("User login : " + AuthenticationService.Instance.PlayerId);
             _playerId = AuthenticationService.Instance.PlayerId;
             var _Load = Load();
@@ -105,7 +104,6 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
         }
         else
         {
-            Debug.Log("Login");
             var SignIn = SignInWithUsernamePasswordAsync(_users, _password);
         }
     }
@@ -114,7 +112,6 @@ public class CloudSaveManager : Singleton<CloudSaveManager>
         PlayerData loadPlayerdata = new PlayerData();
         try
         {
-            Debug.Log("LoadData");
             var respond = await CloudCodeService.Instance.CallModuleEndpointAsync("SaveModule"
                     , "LoadPlayerData"
                     , new Dictionary<string, object> { { "PlayerId", _playerId } });

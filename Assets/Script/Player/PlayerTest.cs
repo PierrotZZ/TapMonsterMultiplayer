@@ -4,11 +4,14 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Services.Lobbies;
+using UnityEngine.SceneManagement;
 
 public class PlayerTest : NetworkBehaviour
 {
     [SerializeField] public PlayerData playerData;
     [SerializeField] Animator animator;
+
+    SceneManagerScript sceneManager;
     internal float time;
     int num;
 
@@ -23,6 +26,7 @@ public class PlayerTest : NetworkBehaviour
     }
     private void Start()
     {
+        sceneManager = FindObjectOfType<SceneManagerScript>();
         playerData = CloudSaveManager.Instance._playerData;
         GameManager.Instance.players.Add(this);
         animator = GetComponentInChildren<Animator>();
@@ -31,29 +35,25 @@ public class PlayerTest : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        time += Time.deltaTime;
-        if (time >= playerData.fireRate && Input.GetKeyDown(KeyCode.Mouse0))
+        if (sceneManager.canStart)
         {
-            if (!IsOwner) return;
-            PlayAnimation();
-            AttackMonsterServerRpc();
-            time = 0;
+            time += Time.deltaTime;
+            if (time >= playerData.fireRate && Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (!IsOwner) return;
+                PlayAnimation();
+                AttackMonsterServerRpc();
+                time = 0;
+            }
+        }
+        else
+        {
+            
         }
     }
 
     void PlayAnimation()
     {
-        // if (num == 0)
-        // {
-        //     animator.SetTrigger("SwingLeft");
-        //     num++;
-        // }
-        // else
-        // {
-        //     animator.SetTrigger("SwingRight");
-        //     num = 0;
-        // }
         if (!IsOwner) return;
         PlayAnimationServerRpc();
     }
