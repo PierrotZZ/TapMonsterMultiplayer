@@ -85,7 +85,7 @@ public class MonsterScript : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
-        TakeDamageServerRpc(statUpgradeManager.player.playerData.Damage);
+        TakeDamageServerRpc(damage);
         FlashServerRpc();
         OnDeathServerRpc();
     }

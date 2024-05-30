@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2939963935
+  GlobalObjectIdHash: 3571188898
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -572,8 +572,9 @@ MonoBehaviour:
     Damage: 3
     DamageLevel: 1
     DamagePrice: 50
-    Money: 0
+    Money: 6000
     fireRate: 1
     FireRatePrice: 50
     FireRateLevel: 1
   animator: {fileID: 0}
+  statUpgradeManager: {fileID: 0}

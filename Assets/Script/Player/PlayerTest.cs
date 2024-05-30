@@ -10,6 +10,7 @@ public class PlayerTest : NetworkBehaviour
 {
     [SerializeField] public PlayerData playerData;
     [SerializeField] Animator animator;
+    [SerializeField] StatUpgradeManager statUpgradeManager;
 
     SceneManagerScript sceneManager;
     internal float time;
@@ -27,6 +28,7 @@ public class PlayerTest : NetworkBehaviour
     private void Start()
     {
         sceneManager = FindObjectOfType<SceneManagerScript>();
+        statUpgradeManager = FindObjectOfType<StatUpgradeManager>();
         playerData = CloudSaveManager.Instance._playerData;
         GameManager.Instance.players.Add(this);
         animator = GetComponentInChildren<Animator>();
@@ -42,13 +44,13 @@ public class PlayerTest : NetworkBehaviour
             {
                 if (!IsOwner) return;
                 PlayAnimation();
-                AttackMonsterServerRpc();
+                AttackMonsterServerRpc(statUpgradeManager.player.playerData.Damage);
                 time = 0;
             }
         }
         else
         {
-            
+
         }
     }
 
@@ -74,9 +76,10 @@ public class PlayerTest : NetworkBehaviour
     }
 
     [ServerRpc]
-    void AttackMonsterServerRpc()
+    void AttackMonsterServerRpc(int damage)
     {
-        GameManager.Instance.monster.TakeDamage(playerData.Damage);
+        GameManager.Instance.monster.TakeDamage(damage);
+
     }
 
 
